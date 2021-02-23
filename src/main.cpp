@@ -1,0 +1,153 @@
+//// 
+/// 03/09/2019
+//// Created By Alain Thierry
+/// 
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+
+//Mix picked for getting the mystery word
+
+string mixWords(string mysteryWord){
+
+    int position(0);
+    for (int i = 0; i < mysteryWord.size(); ++i){
+
+        position = rand() % mysteryWord.size();
+
+        mysteryWord +=mysteryWord[position];
+        mysteryWord.erase(position, 1);
+    }
+    return mysteryWord;
+    
+}
+
+// Pick randomly word in the dictionary
+
+string pickWord(){
+
+    ifstream dico("../data/dico.txt");
+    vector<string> listOfWords ;
+    string word;
+    int pickedWordIndex;
+
+    if(dico){
+
+        while(getline(dico, word)){
+
+            listOfWords.push_back(word);
+        }
+    }
+    else{
+        cout << "ERROR :The file cannot be opened !" << endl;
+    }
+    pickedWordIndex = rand() % listOfWords.size();
+    return (listOfWords[pickedWordIndex]);
+}
+
+// Playing once
+
+void playing(unsigned int trying){
+    
+    string randomWord;
+    string mysteryWord;
+    string seasedWord;
+    int nbTimes(1);
+    
+    randomWord = pickWord();
+    mysteryWord = mixWords(randomWord);
+    
+    do{
+        cout << "          " << mysteryWord << endl;
+        cout << "Devinez le mot mystere ci-dessus : ";
+        
+        cin >> seasedWord;
+        if(seasedWord == randomWord){
+            cout << "Bravo !" << endl;
+            break;
+        }
+        else{
+            cout << "c'est pas le bon mot ";
+            
+            if( trying-nbTimes >= 2){
+                cout << "et il vous reste "<< trying-nbTimes << " essais " << endl;
+            }
+            else if(trying-nbTimes == 1 ){
+                cout << "et il vous reste "<< trying-nbTimes << " essai" << endl;
+            }
+            else{
+                cout << "et vous avez perdu ! " << endl;
+                cout << "======Le mot correct est======: " << randomWord << endl;
+                
+            }
+        }
+        nbTimes ++;
+
+    }while(nbTimes <= trying);
+
+}
+
+// 
+void playingManyTimes() {
+
+    // number of trying
+    unsigned int trying(5);
+     // The main loop
+    bool launched(true);
+    // Anwsers
+    char answerO('O');
+    char answerN('N');
+    // Getting player answer
+    char answer;
+    
+    do{
+        
+        playing(trying);
+        launched = false;
+        
+        cout << "Cliquez sur (O) pour faire une autre partie et ";
+        cout << "(N) pour quitter le jeu." << endl;
+        cin >> answer;
+        
+        switch(answer){
+
+            case 'O':
+                launched = true;
+                break;
+
+            case'N':
+                cout << "Au revoir !" << endl;
+                launched = false;
+                break;
+            default:
+                launched = false;
+                break;
+        }
+        
+    }while(launched);
+}
+
+int main(){
+
+    srand(time(0));
+
+    playingManyTimes();
+
+    return (0);
+}
