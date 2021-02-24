@@ -1,7 +1,8 @@
-//// 
-/// 03/09/2019
+////
+//// 03/09/2019
 //// Created By Alain Thierry
-/// 
+////
+////
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -9,20 +10,11 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
-
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <fstream>
-#include <vector>
-#include <string>
 
 using namespace std;
 
 
-//Mix picked for getting the mystery word
+//Mix picked word for getting the mystery word
 
 string mixWords(string mysteryWord){
 
@@ -38,18 +30,17 @@ string mixWords(string mysteryWord){
     
 }
 
-// Pick randomly word in the dictionary
+//Pick randomly a word in the dictionary
 
 string pickWord(){
 
-    ifstream dico("../data/dico.txt");
+    ifstream file("dico.txt");
     vector<string> listOfWords ;
     string word;
     int pickedWordIndex;
 
-    if(dico){
-
-        while(getline(dico, word)){
+    if(file){
+        while(getline(file, word)){
 
             listOfWords.push_back(word);
         }
@@ -57,11 +48,13 @@ string pickWord(){
     else{
         cout << "ERROR :The file cannot be opened !" << endl;
     }
+    // Picking the random word and return it
     pickedWordIndex = rand() % listOfWords.size();
     return (listOfWords[pickedWordIndex]);
 }
 
-// Playing once
+
+// Playing once 
 
 void playing(unsigned int trying){
     
@@ -74,8 +67,8 @@ void playing(unsigned int trying){
     mysteryWord = mixWords(randomWord);
     
     do{
-        cout << "          " << mysteryWord << endl;
-        cout << "Devinez le mot mystere ci-dessus : ";
+        cout << "          " << mysteryWord;
+        cout << "\nDevinez le mot mystere ci-dessus : ";
         
         cin >> seasedWord;
         if(seasedWord == randomWord){
@@ -103,7 +96,6 @@ void playing(unsigned int trying){
 
 }
 
-// 
 void playingManyTimes() {
 
     // number of trying
@@ -141,13 +133,15 @@ void playingManyTimes() {
         }
         
     }while(launched);
+
 }
 
-int main(){
-
+int main(int argc, char const *argv[])
+{
+    /* code */
     srand(time(0));
 
     playingManyTimes();
-
+    
     return (0);
 }
